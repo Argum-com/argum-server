@@ -12,7 +12,7 @@ async fn main() {
     // env vars are loaded from .env file
     dotenv().ok();
     let port = std::env::var("PORT")
-        .expect("PORT env var is not set")
+        .unwrap_or(String::from("3000")) // default port is 3000
         .parse::<u16>()
         .expect("PORT env var is not a valid port");
 
