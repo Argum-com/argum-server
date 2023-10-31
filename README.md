@@ -34,7 +34,7 @@ docker run --rm -it -p 3000:3000 -v $PWD:/app argum-server
 
 Start the server
 ```bash
-cargo ran
+cargo run
 ```
 
 ### Release
