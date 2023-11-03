@@ -8,6 +8,8 @@ RUN apk update && \
     apk upgrade
 RUN apk add --no-cache musl-dev
 
+RUN cargo install cargo-watch
+
 COPY Cargo.* ./
 COPY src ./src
 

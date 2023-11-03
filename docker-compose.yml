@@ -8,7 +8,11 @@ services:
       DB_HOST: argum-db
       DB_USER: argum
       DB_PASSWORD: example
-    entrypoint: ["cargo", "run"]
+    entrypoint: ["cargo", "watch", "-c", "-x", "run"]
+    volumes:
+      - ./src:/app/src
+      - ./Cargo.toml:/app/Cargo.toml
+      - ./Cargo.lock:/app/Cargo.lock
     ports:
       - 3000:3000
     networks:
