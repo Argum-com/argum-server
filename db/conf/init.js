@@ -1,7 +1,6 @@
 argumDB = db.getSiblingDB('dev');
 db.createCollection('rooms', { capped: false });
 let roomData = {
-    "id": "string",
     "name": "string",
     "isActive": true,
     "messages": [
