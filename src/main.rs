@@ -8,10 +8,7 @@ use std::net::SocketAddr;
 use axum::{routing::get, Router};
 use dotenvy::dotenv;
 
-use crate::{
-    api::{get_room, get_rooms},
-    api_mock::get_rooms_mock,
-};
+use crate::api::{get_room, get_rooms};
 
 #[tokio::main]
 async fn main() {
