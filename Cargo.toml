@@ -9,3 +9,6 @@ edition = "2021"
 axum = "0.6.20"
 dotenvy = "0.15.7"
 tokio = { version = "1.33.0", features = ["macros", "rt-multi-thread"] }
+mongodb = "2.7"
+bson = "2.7"
+serde = "1.0.190"

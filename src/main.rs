@@ -1,10 +1,36 @@
+pub mod room;
+pub mod message;
+
 use std::net::SocketAddr;
 
-use axum::{response::Html, routing::get, Router};
+use axum::{routing::get, Router, Json};
 use dotenvy::dotenv;
+use room::Room;
 
-async fn hello_world() -> Html<&'static str> {
-    Html("<h1>Hello, World!</h1>")
+use crate::message::Message;
+
+async fn get_rooms() -> Json<Vec<Room>> {
+    let rooms = vec![
+        Room {
+            id: bson::oid::ObjectId::new(),
+            name: "Mock Room".to_string(),
+            is_active: true,
+            messages: vec![
+                Message {
+                    timestamp: bson::DateTime::now(),
+                    text: "Hello, world!".to_string(),
+                    author: bson::oid::ObjectId::new(),
+                },
+                Message {
+                    timestamp: bson::DateTime::now(),
+                    text: "Goodbye, world!".to_string(),
+                    author: bson::oid::ObjectId::new(),
+                },
+            ],
+        }
+    ];
+
+    Json(rooms)
 }
 
 #[tokio::main]
@@ -17,7 +43,8 @@ async fn main() {
         .expect("PORT env var is not a valid port");
 
     // build our application with a route
-    let app = Router::new().route("/", get(hello_world));
+    println!("Listening on port {}", port);
+    let app = Router::new().route("/", get(get_rooms));
 
     // run it
     axum::Server::bind(&SocketAddr::from(([0, 0, 0, 0], port)))
