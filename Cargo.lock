@@ -52,6 +52,7 @@ dependencies = [
  "axum",
  "bson",
  "dotenvy",
+ "futures-util",
  "mongodb",
  "serde",
  "tokio",
