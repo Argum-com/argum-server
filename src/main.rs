@@ -1,5 +1,4 @@
 pub mod api;
-pub mod api_mock;
 pub mod db;
 pub mod message;
 pub mod room;
@@ -26,7 +25,6 @@ async fn main() {
     // build our application with a route
     println!("Listening on port {}", port);
     let app = Router::new()
-        .route("/rooms_mock", get(get_rooms_mock))
         .route("/rooms", get(get_rooms))
         .route("/room/:room_id", get(get_room));
 
