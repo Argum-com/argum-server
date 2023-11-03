@@ -35,9 +35,7 @@ USER appuser
 # Copy the binary from the builder stage.
 COPY --from=builder /app/target/release/argum-server .
 
-COPY ./docker-entrypoint.sh .
-
 # Expose the port that the application listens on.
 EXPOSE ${PORT}
 
-ENTRYPOINT [ "./docker-entrypoint.sh" ]
+ENTRYPOINT [ "./argum-server" ]
