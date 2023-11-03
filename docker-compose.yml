@@ -1,0 +1,47 @@
+version: '3.8'
+services:
+  server:
+    image: argum-server:local-dev
+    container_name: argum-server
+    restart: always
+    environment:
+      DB_HOST: argum-db
+      DB_USER: argum
+      DB_PASSWORD: example
+    ports:
+      - 3000:3000
+    networks:
+      - argum
+    depends_on:
+      - db
+  db:
+    image: mongo:5.0.22
+    container_name: argum-db
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: argum
+      MONGO_INITDB_ROOT_PASSWORD: example
+      MONGO_INITDB_DATABASE: dev
+    networks:
+      - argum
+    volumes:
+      - db-vol:/data/db
+      - ./db/conf/init.js:/docker-entrypoint-initdb.d/init.js
+  mongoku:
+    image: huggingface/mongoku:latest
+    container_name: mongoku
+    restart: on-failure
+    ports:
+      - 3100:3100
+    environment:
+      MONGOKU_DEFAULT_HOST: "mongodb://argum:example@argum-db:27017"
+    depends_on:
+      - db
+    networks:
+      - argum
+volumes:
+  db-vol:
+    name: db-vol
+networks:
+  argum:
+    name: argum
