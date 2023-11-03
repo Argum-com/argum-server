@@ -1,11 +1,14 @@
+pub mod api;
+pub mod db;
+pub mod message;
+pub mod room;
+
 use std::net::SocketAddr;
 
-use axum::{response::Html, routing::get, Router};
+use axum::{routing::get, Router};
 use dotenvy::dotenv;
 
-async fn hello_world() -> Html<&'static str> {
-    Html("<h1>Hello, World!</h1>")
-}
+use crate::api::{get_room, get_rooms};
 
 #[tokio::main]
 async fn main() {
@@ -17,7 +20,10 @@ async fn main() {
         .expect("PORT env var is not a valid port");
 
     // build our application with a route
-    let app = Router::new().route("/", get(hello_world));
+    println!("Listening on port {}", port);
+    let app = Router::new()
+        .route("/rooms", get(get_rooms))
+        .route("/room/:room_id", get(get_room));
 
     // run it
     axum::Server::bind(&SocketAddr::from(([0, 0, 0, 0], port)))
