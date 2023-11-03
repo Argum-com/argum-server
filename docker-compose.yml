@@ -8,6 +8,7 @@ services:
       DB_HOST: argum-db
       DB_USER: argum
       DB_PASSWORD: example
+    entrypoint: ["cargo", "run"]
     ports:
       - 3000:3000
     networks:
