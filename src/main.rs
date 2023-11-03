@@ -1,14 +1,16 @@
-pub mod api;
-pub mod db;
-pub mod message;
-pub mod room;
-
 use std::net::SocketAddr;
 
-use axum::{routing::get, Router};
+use axum::{http::StatusCode, routing::get, Router};
 use dotenvy::dotenv;
+use tower_http::trace::TraceLayer;
+use tracing::info;
 
 use crate::api::{get_room, get_rooms};
+
+mod api;
+mod db;
+mod message;
+mod room;
 
 #[tokio::main]
 async fn main() {
@@ -19,11 +21,19 @@ async fn main() {
         .parse::<u16>()
         .expect("PORT env var is not a valid port");
 
+    // enable logging
+    tracing_subscriber::fmt()
+        .with_max_level(tracing::Level::DEBUG)
+        .init();
+
+    info!("Starting server on port {}", port);
+
     // build our application with a route
-    println!("Listening on port {}", port);
     let app = Router::new()
+        .route("/healthcheck", get(|| async { StatusCode::OK }))
         .route("/rooms", get(get_rooms))
-        .route("/room/:room_id", get(get_room));
+        .route("/room/:room_id", get(get_room))
+        .layer(TraceLayer::new_for_http());
 
     // run it
     axum::Server::bind(&SocketAddr::from(([0, 0, 0, 0], port)))
