@@ -29,7 +29,7 @@ docker build -t argum-server:local-dev -f dev.Dockerfile .
 
 Run Dev Docker image
 ```bash
-docker run --rm -it -p 3000:3000 -v $PWD:/app argum-server
+docker run --name argum-server --rm -it -p 3000:3000 -v $PWD:/app argum-server:local-dev
 ```
 
 Start the server
