@@ -8,6 +8,8 @@ services:
       DB_HOST: argum-db
       DB_USER: argum
       DB_PASSWORD: example
+    env_file:
+      - .env
     entrypoint: ["cargo", "watch", "-c", "-x", "run"]
     volumes:
       - ./src:/app/src
@@ -30,7 +32,7 @@ services:
     networks:
       - argum
     volumes:
-      - db-vol:/data/db
+      # - db-vol:/data/db
       - ./db/conf/init.js:/docker-entrypoint-initdb.d/init.js
   mongoku:
     image: huggingface/mongoku:latest

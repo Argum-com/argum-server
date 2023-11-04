@@ -5,14 +5,14 @@ let roomData = {
     "isActive": true,
     "messages": [
       {
-        "timestamp": "Date",
+        "timestamp": "Date1",
         "text": "string",
-        "author": "string"
+        "author": "65455f29ec879711b3fb9448"
       },
       {
-        "timestamp": "Date",
+        "timestamp": "Date2",
         "text": "string",
-        "author": "string"
+        "author": "65455f29ec879711b3fb9455"
       }
     ]
   };  
