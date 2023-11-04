@@ -1,14 +1,15 @@
 use axum::{extract::Path, http::StatusCode, Json};
 use bson::oid::ObjectId;
+use tracing::error;
 
 use crate::{db::Db, room::Room};
 
 pub async fn get_rooms() -> Result<Json<Vec<Room>>, StatusCode> {
     let db = Db::new().await;
-    let rooms = db
-        .get_rooms()
-        .await
-        .map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?;
+    let rooms = db.get_rooms().await.map_err(|e| {
+        error!("{}", e);
+        StatusCode::INTERNAL_SERVER_ERROR
+    })?;
     Ok(Json(rooms))
 }
 

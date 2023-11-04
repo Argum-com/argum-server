@@ -1,9 +1,9 @@
 use bson::{oid::ObjectId, DateTime};
 use serde::{Deserialize, Serialize};
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Message {
-    pub timestamp: DateTime,
+    pub timestamp: i64,
     pub text: String,
     pub author: ObjectId,
 }
@@ -11,7 +11,7 @@ pub struct Message {
 impl Default for Message {
     fn default() -> Self {
         Self {
-            timestamp: DateTime::now(),
+            timestamp: DateTime::now().timestamp_millis(),
             text: Default::default(),
             author: ObjectId::new(),
         }
