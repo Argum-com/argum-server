@@ -1,9 +1,11 @@
-version: '3.8'
+version: "3.8"
 services:
   server:
     image: argum-server:local-dev
     container_name: argum-server
     restart: always
+    env_file:
+      - .env
     environment:
       DB_HOST: argum-db
       DB_USER: argum
@@ -23,6 +25,8 @@ services:
     image: mongo:5.0.22
     container_name: argum-db
     restart: always
+    ports:
+      - 27017:27017
     environment:
       MONGO_INITDB_ROOT_USERNAME: argum
       MONGO_INITDB_ROOT_PASSWORD: example
@@ -30,7 +34,7 @@ services:
     networks:
       - argum
     volumes:
-      - db-vol:/data/db
+      # - db-vol:/data/db
       - ./db/conf/init.js:/docker-entrypoint-initdb.d/init.js
   mongoku:
     image: huggingface/mongoku:latest
