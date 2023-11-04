@@ -14,7 +14,7 @@ use dotenvy::dotenv;
 use futures_util::{SinkExt, StreamExt};
 use tokio::sync::broadcast;
 use tower_http::{cors::CorsLayer, trace::TraceLayer};
-use tracing::info;
+use tracing::{error, info};
 
 use crate::api::{get_room, get_rooms};
 
@@ -28,12 +28,12 @@ async fn ws_handler(
     State(state): State<Arc<AppState>>,
     ConnectInfo(addr): ConnectInfo<SocketAddr>,
 ) -> impl IntoResponse {
-    println!("Got a WebSocket connection from: {}", addr);
+    info!("Got a WebSocket connection from: {}", addr);
     ws.on_failed_upgrade(move |error| {
-        println!("Failed to upgrade WebSocket connection: {:?}", error);
+        error!("Failed to upgrade WebSocket connection: {:?}", error);
     })
     .on_upgrade(move |socket| async move {
-        println!("New WebSocket connection: {}", addr);
+        info!("New WebSocket connection: {}", addr);
         let (mut sender, mut receiver) = socket.split();
 
         let tx = state.tx.lock().unwrap().clone();
@@ -43,8 +43,8 @@ async fn ws_handler(
 
         // Send joined message to all subscribers.
         let msg = format!("{} joined.", addr);
-        tracing::debug!("{}", msg);
-        let _ = tx.send(msg);
+        info!("{}", msg);
+        // let _ = tx.send(msg);
 
         // This task will receive broadcast messages and send text message to our client.
         let mut send_task = tokio::spawn(async move {
@@ -60,7 +60,9 @@ async fn ws_handler(
         let mut recv_task = tokio::spawn(async move {
             while let Some(Ok(Message::Text(text))) = receiver.next().await {
                 // Add username before message.
-                let _ = tx.send(format!("{}: {}", addr, text));
+                let msg = format!("{}: {}", addr, text);
+                info!("Sending message: {}", msg);
+                let _ = tx.send(msg);
             }
         });
 
