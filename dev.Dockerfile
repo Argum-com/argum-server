@@ -6,7 +6,7 @@ WORKDIR /app
 
 RUN apk update && \
     apk upgrade
-RUN apk add --no-cache musl-dev
+RUN apk add --no-cache musl-dev curl
 
 RUN cargo install cargo-watch
 
